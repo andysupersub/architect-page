@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Details & Designer Resources | Supersub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-navy:  #011648;
+      --color-blue:  #276ce9;
+      --color-mist:  #f0f4fd;
+      --color-white: #ffffff;
+      --color-border: rgba(1, 22, 72, 0.10);
+      --max-w: 1200px;
+      --px: 5%;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--color-navy);
+      background: var(--color-white);
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── UTILITY ─── */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--px);
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-blue);
+      margin-bottom: 12px;
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      padding: 13px 28px;
+      border-radius: 7px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-primary  { background: var(--color-blue); color: var(--color-white); }
+    .btn-outline  { background: transparent; border: 1.5px solid var(--color-white); color: var(--color-white); }
+    .btn-outline-navy { background: transparent; border: 1.5px solid var(--color-navy); color: var(--color-navy); }
+
+    /* ══════════════════════════════════════
+       NAV
+    ══════════════════════════════════════ */
+    .nav {
+      background: var(--color-navy);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      gap: 24px;
+    }
+
+    /* Logo */
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-shrink: 0;
+    }
+    .nav-logo-mark {
+      width: 34px;
+      height: 34px;
+    }
+    .nav-logo-text {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      color: var(--color-white);
+    }
+    .nav-logo-text span {
+      color: var(--color-blue);
+    }
+
+    /* Desktop nav links */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+      flex: 1;
+      justify-content: center;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color: rgba(255,255,255,0.82);
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--color-white); background: rgba(255,255,255,0.08); }
+    .nav-links a.active { color: var(--color-white); }
+    .nav-links .chevron {
+      font-size: 10px;
+      opacity: 0.6;
+    }
+
+    /* Phone + mobile toggle */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .nav-phone {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-white);
+      letter-spacing: -0.01em;
+    }
+    .nav-phone:hover { color: var(--color-blue); }
+
+    .nav-mobile-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-mobile-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--color-white);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* Mobile nav drawer */
+    .nav-drawer {
+      display: none;
+      background: var(--color-navy);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 16px var(--px) 24px;
+    }
+    .nav-drawer.open { display: block; }
+    .nav-drawer a {
+      display: block;
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.82);
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-drawer a:last-child { border-bottom: none; }
+    .nav-drawer a:hover { color: var(--color-white); }
+    .nav-drawer .nav-drawer-phone {
+      margin-top: 16px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-white);
+    }
+
+    /* ══════════════════════════════════════
+       HERO
+    ══════════════════════════════════════ */
+    .hero {
+      background: var(--color-navy);
+      padding: 80px var(--px) 90px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -80px;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(39,108,233,0.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -60px;
+      width: 360px; height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(39,108,233,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(39,108,233,0.15);
+      border: 1px solid rgba(39,108,233,0.3);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+      line-height: 1.08;
+      color: var(--color-white);
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--color-blue); }
+    .hero p {
+      font-size: 18px;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      color: rgba(255,255,255,0.7);
+      max-width: 560px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ══════════════════════════════════════
+       AT A GLANCE STRIP
+    ══════════════════════════════════════ */
+    .glance-strip {
+      background: var(--color-blue);
+      padding: 20px var(--px);
+    }
+    .glance-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 32px;
+    }
+    .glance-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-white);
+      letter-spacing: -0.01em;
+    }
+    .glance-item::before {
+      content: '✓';
+      font-weight: 600;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+    .glance-divider {
+      width: 1px;
+      height: 16px;
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* ══════════════════════════════════════
+       SOFTWARE SECTION
+    ══════════════════════════════════════ */
+    .section-sw {
+      padding: 80px var(--px);
+      background: var(--color-white);
+    }
+    .two-col {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .two-col.reverse { direction: rtl; }
+    .two-col.reverse > * { direction: ltr; }
+
+    .section-text h2 {
+      font-size: clamp(24px, 3.5vw, 32px);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+      line-height: 1.2;
+      color: var(--color-navy);
+      margin-bottom: 16px;
+    }
+    .section-text p {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(1,22,72,0.7);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .section-text p:last-child { margin-bottom: 0; }
+
+    /* Format tags */
+    .format-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    .format-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--color-mist);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-navy);
+      letter-spacing: -0.01em;
+    }
+    .format-tag-icon {
+      font-size: 14px;
+    }
+
+    /* Software visual placeholder */
+    .sw-visual {
+      background: var(--color-mist);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      aspect-ratio: 4/3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 32px;
+    }
+    .sw-visual-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--color-navy);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sw-visual-icon svg { width: 28px; height: 28px; fill: var(--color-white); }
+    .sw-visual-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(1,22,72,0.4);
+      letter-spacing: -0.01em;
+      text-align: center;
+    }
+
+    /* ══════════════════════════════════════
+       CONNECTION DETAILS GRID
+    ══════════════════════════════════════ */
+    .section-details {
+      padding: 80px var(--px);
+      background: var(--color-mist);
+    }
+    .section-header {
+      max-width: var(--max-w);
+      margin: 0 auto 48px;
+    }
+    .section-header h2 {
+      font-size: clamp(24px, 3.5vw, 32px);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+      line-height: 1.2;
+      color: var(--color-navy);
+      margin-bottom: 12px;
+    }
+    .section-header p {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(1,22,72,0.65);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    .details-grid {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .detail-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+      padding: 24px;
+      transition: box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .detail-card:hover {
+      box-shadow: 0 6px 24px rgba(1,22,72,0.10);
+      transform: translateY(-2px);
+    }
+    .detail-card-num {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--color-blue);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .detail-card-title {
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      color: var(--color-navy);
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+    .detail-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .detail-card-type {
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(1,22,72,0.45);
+    }
+    .detail-card-action {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-blue);
+      letter-spacing: -0.01em;
+    }
+    .detail-card-action:hover { opacity: 0.75; }
+
+    /* ══════════════════════════════════════
+       SPECIFIER NOTE (DARK BAND)
+    ══════════════════════════════════════ */
+    .section-specifier {
+      background: var(--color-navy);
+      padding: 72px var(--px);
+    }
+    .specifier-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .specifier-text .eyebrow { color: rgba(255,255,255,0.5); }
+    .specifier-text h2 {
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+      color: var(--color-white);
+      margin-bottom: 16px;
+    }
+    .specifier-text p {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.75;
+      margin-bottom: 12px;
+    }
+    .specifier-text p:last-child { margin-bottom: 0; }
+
+    .sed-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 36px;
+    }
+    .sed-card h3 {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.04em;
+      color: var(--color-white);
+      margin-bottom: 14px;
+    }
+    .sed-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .sed-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.5;
+    }
+    .sed-list li::before {
+      content: '→';
+      color: var(--color-blue);
+      font-size: 14px;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════
+       TECH PACKAGE FORM
+    ══════════════════════════════════════ */
+    .section-package {
+      padding: 80px var(--px);
+      background: var(--color-white);
+    }
+    .package-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+    .package-left h2 {
+      font-size: clamp(24px, 3.5vw, 34px);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+      line-height: 1.15;
+      color: var(--color-navy);
+      margin-bottom: 16px;
+    }
+    .package-left p {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(1,22,72,0.65);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    .package-includes {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .package-includes li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--color-navy);
+      line-height: 1.5;
+    }
+    .package-includes .tick {
+      width: 20px;
+      height: 20px;
+      background: rgba(39,108,233,0.12);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .package-includes .tick svg {
+      width: 11px;
+      height: 11px;
+      stroke: var(--color-blue);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Form */
+    .package-form {
+      background: var(--color-mist);
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+      padding: 40px;
+    }
+    .package-form h3 {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.04em;
+      color: var(--color-navy);
+      margin-bottom: 6px;
+    }
+    .package-form .form-sub {
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(1,22,72,0.55);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--color-navy);
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid rgba(1,22,72,0.18);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--color-navy);
+      background: var(--color-white);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group input::placeholder { color: rgba(1,22,72,0.35); }
+    .form-group input:focus {
+      border-color: var(--color-blue);
+      box-shadow: 0 0 0 3px rgba(39,108,233,0.12);
+    }
+    .form-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--color-blue);
+      color: var(--color-white);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .form-submit:hover { opacity: 0.87; transform: translateY(-1px); }
+
+    /* Success state */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 24px 0;
+    }
+    .form-success.show { display: block; }
+    .form-success-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(39,108,233,0.12);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .form-success-icon svg {
+      width: 24px; height: 24px;
+      stroke: var(--color-blue);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .form-success h3 {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.04em;
+      color: var(--color-navy);
+      margin-bottom: 8px;
+    }
+    .form-success p {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(1,22,72,0.6);
+      line-height: 1.6;
+    }
+    .form-success .phone-link {
+      color: var(--color-blue);
+      font-weight: 500;
+    }
+
+    /* ══════════════════════════════════════
+       FAQ
+    ══════════════════════════════════════ */
+    .section-faq {
+      padding: 80px var(--px);
+      background: var(--color-mist);
+    }
+    .faq-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid var(--color-border);
+    }
+    .faq-item {
+      border-bottom: 1px solid var(--color-border);
+    }
+    .faq-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 24px 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+    }
+    .faq-trigger h3 {
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      color: var(--color-navy);
+      line-height: 1.4;
+    }
+    .faq-icon {
+      width: 28px;
+      height: 28px;
+      border: 1.5px solid var(--color-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .faq-icon svg {
+      width: 12px; height: 12px;
+      stroke: var(--color-navy);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      transition: transform 0.3s;
+    }
+    .faq-item.open .faq-icon {
+      background: var(--color-blue);
+      border-color: var(--color-blue);
+    }
+    .faq-item.open .faq-icon svg { stroke: white; transform: rotate(45deg); }
+    .faq-body {
+      display: none;
+      padding: 0 0 24px;
+      max-width: 720px;
+    }
+    .faq-body.open { display: block; }
+    .faq-body p {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(1,22,72,0.7);
+      line-height: 1.75;
+      margin-bottom: 12px;
+    }
+    .faq-body p:last-child { margin-bottom: 0; }
+    .faq-body strong { font-weight: 500; color: var(--color-navy); }
+
+    /* ══════════════════════════════════════
+       READY TO SPECIFY CTA
+    ══════════════════════════════════════ */
+    .section-cta {
+      background: var(--color-navy);
+      padding: 80px var(--px);
+      text-align: center;
+    }
+    .section-cta .eyebrow { color: rgba(255,255,255,0.5); }
+    .section-cta h2 {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+      color: var(--color-white);
+      margin-bottom: 16px;
+    }
+    .section-cta p {
+      font-size: 17px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      max-width: 520px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+    .cta-contact-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .cta-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.75);
+    }
+    .cta-contact-item a {
+      color: var(--color-blue);
+      font-weight: 500;
+    }
+    .cta-contact-item a:hover { opacity: 0.8; }
+    .cta-contact-sep {
+      width: 1px;
+      height: 20px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* ══════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════ */
+    .footer {
+      background: var(--color-navy);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 64px var(--px) 0;
+    }
+    .footer-grid {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+      gap: 48px;
+    }
+
+    /* Brand col */
+    .footer-brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 16px;
+    }
+    .footer-brand-mark {
+      width: 30px; height: 30px;
+    }
+    .footer-brand-name {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      color: var(--color-white);
+    }
+    .footer-brand-name span { color: var(--color-blue); }
+    .footer-tagline {
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.65;
+      margin-bottom: 20px;
+      max-width: 280px;
+    }
+    .footer-trust {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.38);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .footer-trust::before {
+      content: '⚠ ';
+      font-size: 11px;
+    }
+
+    /* Nav cols */
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a {
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: -0.01em;
+      transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: var(--color-white); }
+    .footer-col ul a.active-page { color: var(--color-blue); }
+
+    /* Contact col */
+    .footer-contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .footer-contact-row .icon {
+      font-size: 14px;
+      margin-top: 1px;
+      opacity: 0.6;
+      flex-shrink: 0;
+    }
+    .footer-contact-row p {
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.55;
+      letter-spacing: -0.01em;
+    }
+    .footer-contact-row a {
+      color: rgba(255,255,255,0.65);
+      transition: color 0.2s;
+    }
+    .footer-contact-row a:hover { color: var(--color-white); }
+
+    .footer-network-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: -0.01em;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .footer-network-btn:hover { border-color: var(--color-blue); color: var(--color-white); }
+
+    /* Social */
+    .footer-socials {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .footer-social-icon {
+      width: 34px; height: 34px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .footer-social-icon:hover { border-color: var(--color-blue); background: rgba(39,108,233,0.15); }
+    .footer-social-icon svg { width: 15px; height: 15px; fill: rgba(255,255,255,0.6); }
+
+    /* Bottom bar */
+    .footer-bottom {
+      max-width: var(--max-w);
+      margin: 48px auto 0;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 20px 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-bottom p {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0;
+    }
+    .footer-bottom-links {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-bottom-links a {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.35);
+      transition: color 0.2s;
+    }
+    .footer-bottom-links a:hover { color: rgba(255,255,255,0.65); }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-phone { display: none; }
+      .nav-mobile-toggle { display: flex; }
+
+      .two-col,
+      .two-col.reverse,
+      .specifier-inner,
+      .package-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        direction: ltr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 36px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      :root { --px: 5%; }
+
+      .glance-divider { display: none; }
+      .glance-inner { gap: 10px 20px; justify-content: flex-start; }
+
+      .details-grid { grid-template-columns: 1fr 1fr; }
+
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .footer-bottom-links { flex-wrap: wrap; gap: 12px; }
+
+      .cta-contact-sep { display: none; }
+      .cta-contact-row { flex-direction: column; gap: 12px; }
+
+      .package-form { padding: 28px 22px; }
+
+      .sed-card { padding: 26px 22px; }
+    }
+
+    @media (max-width: 440px) {
+      .details-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════ NAV ══════════ -->
+  <nav class="nav">
+    <div class="nav-inner">
+
+      <!-- Logo -->
+      <a href="https://supersub.co.nz" class="nav-logo">
+        <svg class="nav-logo-mark" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="34" height="34" rx="7" fill="#276ce9"/>
+          <path d="M8 13h18M8 17h18M8 21h12" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <span class="nav-logo-text">SUPER<span>SUB</span></span>
+      </a>
+
+      <!-- Desktop links -->
+      <ul class="nav-links">
+        <li><a href="https://supersub.co.nz/panel-system">SIP Panels <span class="chevron">▾</span></a></li>
+        <li><a href="https://supersub.co.nz/snaplock-wall">Snaplock Wall <span class="chevron">▾</span></a></li>
+        <li><a href="https://supersub.co.nz/for-professionals">For Professionals <span class="chevron">▾</span></a></li>
+        <li><a href="#" class="active">Technical Centre</a></li>
+        <li><a href="https://supersub.co.nz/about-us">About Us</a></li>
+      </ul>
+
+      <!-- Right -->
+      <div class="nav-right">
+        <a href="tel:0800782631" class="nav-phone">0800 782 631</a>
+        <div class="nav-mobile-toggle" id="navToggle" onclick="toggleNav()">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+    </div>
+    <!-- Mobile drawer -->
+    <div class="nav-drawer" id="navDrawer">
+      <a href="https://supersub.co.nz/panel-system">SIP Panels</a>
+      <a href="https://supersub.co.nz/snaplock-wall">Snaplock Wall</a>
+      <a href="https://supersub.co.nz/for-professionals">For Professionals</a>
+      <a href="#">Technical Centre</a>
+      <a href="https://supersub.co.nz/about-us">About Us</a>
+      <a href="https://supersub.co.nz/contact-us">Contact Us</a>
+      <a class="nav-drawer-phone" href="tel:0800782631">📞 0800 782 631</a>
+    </div>
+  </nav>
+
+  <!-- ══════════ HERO ══════════ -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">For Architects & Designers</div>
+      <h1>Technical Details &<br><span>Designer Resources</span></h1>
+      <p>Everything you need to specify SuperPanel. From connection details to consent documentation — all in one place.</p>
+      <div class="hero-ctas">
+        <a href="#package" class="btn btn-primary">Get the Technical Package</a>
+        <a href="#details" class="btn btn-outline">Browse Connection Details</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ AT A GLANCE STRIP ══════════ -->
+  <div class="glance-strip">
+    <div class="glance-inner">
+      <div class="glance-item">Wind zones NZ1–NZ4</div>
+      <div class="glance-divider"></div>
+      <div class="glance-item">Panels 113mm–313mm thick</div>
+      <div class="glance-divider"></div>
+      <div class="glance-item">Up to two storeys under NZS 3604</div>
+      <div class="glance-divider"></div>
+      <div class="glance-item">NZBC E2/AS1 compliant</div>
+      <div class="glance-divider"></div>
+      <div class="glance-item">Snow zones N0–N5</div>
+    </div>
+  </div>
+
+  <!-- ══════════ WORKS WITH YOUR SOFTWARE ══════════ -->
+  <section class="section-sw">
+    <div class="two-col">
+      <div class="sw-visual">
+        <div class="sw-visual-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+            <polyline points="14,2 14,8 20,8" stroke="#276ce9" stroke-width="0" fill="rgba(255,255,255,0.15)"/>
+            <line x1="16" y1="13" x2="8" y2="13" stroke="white" stroke-width="1.5" fill="none"/>
+            <line x1="16" y1="17" x2="8" y2="17" stroke="white" stroke-width="1.5" fill="none"/>
+            <line x1="10" y1="9" x2="8" y2="9" stroke="white" stroke-width="1.5" fill="none"/>
+          </svg>
+        </div>
+        <div class="sw-visual-label">Connection Detail Preview<br>— Image placeholder —</div>
+      </div>
+      <div class="section-text">
+        <p class="eyebrow">Works with your software</p>
+        <h2>Details formatted for your workflow.</h2>
+        <p>All 21 standard connection details can be viewed directly on this page — easy to review and reference throughout the design process.</p>
+        <p>Details are also available for download in formats to suit your workflow. Request the complete package below.</p>
+        <div class="format-tags">
+          <span class="format-tag"><span class="format-tag-icon">📄</span> PDF</span>
+          <span class="format-tag"><span class="format-tag-icon">📐</span> DWG</span>
+          <span class="format-tag"><span class="format-tag-icon">📐</span> DXF</span>
+          <span class="format-tag"><span class="format-tag-icon">🏗</span> Revit</span>
+          <span class="format-tag"><span class="format-tag-icon">✉</span> Custom format on request</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ CONNECTION DETAILS GRID ══════════ -->
+  <section class="section-details" id="details">
+    <div class="section-header">
+      <p class="eyebrow">Standard Design Package</p>
+      <h2>Browse all 21 connection details.</h2>
+      <p>Select any detail to preview online, or download the complete set in the format that best suits your project.</p>
+    </div>
+    <div class="details-grid">
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 01</div>
+        <div class="detail-card-title">Floor Panel to Slab — Perimeter Connection</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Foundation</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 02</div>
+        <div class="detail-card-title">Floor Panel to Slab — Internal Connection</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Foundation</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 03</div>
+        <div class="detail-card-title">Wall Panel Base — Concrete Slab</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Wall</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 04</div>
+        <div class="detail-card-title">Wall Panel Base — Timber Floor System</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Wall</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 05</div>
+        <div class="detail-card-title">Wall Panel — Corner Junction</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Wall</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 06</div>
+        <div class="detail-card-title">Wall Panel — T-Junction</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Wall</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 07</div>
+        <div class="detail-card-title">Wall Panel — Window Sill Connection</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Openings</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 08</div>
+        <div class="detail-card-title">Wall Panel — Window Head Detail</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Openings</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 09</div>
+        <div class="detail-card-title">Wall Panel — Window Jamb Detail</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Openings</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 10</div>
+        <div class="detail-card-title">Wall Panel — Door Head & Jamb</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Openings</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 11</div>
+        <div class="detail-card-title">Wall Panel Top Plate — Roof Connection</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Roof</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 12</div>
+        <div class="detail-card-title">Roof Panel — Ridge Connection</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Roof</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 13</div>
+        <div class="detail-card-title">Roof Panel — Hip & Valley Connection</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Roof</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 14</div>
+        <div class="detail-card-title">Roof Panel — Eave Detail</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Roof</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 15</div>
+        <div class="detail-card-title">Roof Panel — Gable End Connection</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Roof</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 16</div>
+        <div class="detail-card-title">First Floor — Panel-to-Panel Vertical Joint</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Multi-storey</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 17</div>
+        <div class="detail-card-title">Inter-Storey — Floor-Wall Interface</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Multi-storey</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 18</div>
+        <div class="detail-card-title">Service Chase — Electrical Horizontal Run</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Services</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 19</div>
+        <div class="detail-card-title">Service Chase — Vertical Full-Height Run</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Services</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 20</div>
+        <div class="detail-card-title">External Wall — Cladding Cavity & Underlay</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Cladding</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-card-num">Detail 21</div>
+        <div class="detail-card-title">Panel Joint — Spline & Adhesive Seal</div>
+        <div class="detail-card-footer">
+          <span class="detail-card-type">Assembly</span>
+          <span class="detail-card-action">Preview →</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════ SPECIFIER NOTE ══════════ -->
+  <section class="section-specifier">
+    <div class="specifier-inner">
+      <div class="specifier-text">
+        <p class="eyebrow">A note for specifiers</p>
+        <h2>Standard details don't define the limits of the system.</h2>
+        <p>The spans, panel sizes, and details shown here represent our standard pre-engineered scope under NZS 3604:2011.</p>
+        <p>In practice, many projects extend well beyond these parameters. If your project sits outside the standard details, talk to us early. Chances are we've already worked through something similar.</p>
+        <a href="https://supersub.co.nz/contact-us" class="btn btn-outline" style="margin-top: 28px;">Talk to Our Team</a>
+      </div>
+      <div class="sed-card">
+        <h3>Specific Engineering Design (SED)</h3>
+        <ul class="sed-list">
+          <li>Larger panel spans beyond standard tables</li>
+          <li>Complex geometries and irregular floor plans</li>
+          <li>Exposed structural elements and feature panels</li>
+          <li>Multi-storey applications</li>
+          <li>Higher wind or snow zone requirements</li>
+          <li>Increased load conditions</li>
+        </ul>
+        <a href="https://supersub.co.nz/contact-us" class="btn btn-primary">Discuss Your Project</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ TECH PACKAGE + FORM ══════════ -->
+  <section class="section-package" id="package">
+    <div class="package-inner">
+      <div class="package-left">
+        <p class="eyebrow">Complete Resource Package</p>
+        <h2>Get the full technical package.</h2>
+        <p>Everything architects and designers need to specify, consent, and build with SuperPanel. Complete the form and we'll send the package directly to you.</p>
+        <ul class="package-includes">
+          <li>
+            <span class="tick"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>
+            All 21 standard connection details
+          </li>
+          <li>
+            <span class="tick"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>
+            The complete SuperPanel Design Manual
+          </li>
+          <li>
+            <span class="tick"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>
+            Floor, wall and roof span tables
+          </li>
+          <li>
+            <span class="tick"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>
+            Panel compositions and R-values
+          </li>
+          <li>
+            <span class="tick"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>
+            Assembly sequencing guidance
+          </li>
+          <li>
+            <span class="tick"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>
+            Services routing recommendations
+          </li>
+          <li>
+            <span class="tick"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>
+            Design checklists and engineering calculations
+          </li>
+        </ul>
+      </div>
+
+      <div class="package-form" id="packageFormWrap">
+        <h3>Send me the files</h3>
+        <p class="form-sub">Fill in your details below and we'll email you the complete package straight away.</p>
+
+        <div id="packageForm">
+          <div class="form-group">
+            <label for="fname">Full name</label>
+            <input type="text" id="fname" placeholder="Jane Smith" autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="femail">Email address</label>
+            <input type="email" id="femail" placeholder="jane@studio.co.nz" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="fphone">Phone number</label>
+            <input type="tel" id="fphone" placeholder="+64 21 000 0000" autocomplete="tel">
+          </div>
+          <div class="form-group">
+            <label for="fpractice">Practice or company name</label>
+            <input type="text" id="fpractice" placeholder="Smith Architecture Ltd" autocomplete="organization">
+          </div>
+          <button class="form-submit" onclick="submitForm()">Send me the files</button>
+        </div>
+
+        <div class="form-success" id="formSuccess">
+          <div class="form-success-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>
+          </div>
+          <h3>Check your inbox</h3>
+          <p>The technical package is on its way. If you'd like to discuss a current project, give us a call on <a class="phone-link" href="tel:0210555646">021 055 5646</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FAQ ══════════ -->
+  <section class="section-faq">
+    <div class="faq-inner">
+      <div class="section-header" style="margin-bottom: 40px;">
+        <p class="eyebrow">Common questions from architects</p>
+        <h2>Design and specification FAQs.</h2>
+      </div>
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <h3>Do I need to show individual panel layouts on my drawings?</h3>
+            <span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span>
+          </button>
+          <div class="faq-body">
+            <p>No. Architects and designers are not expected to document panel layouts within their architectural drawings.</p>
+            <p>Once the architectural and structural documentation has been finalised, we prepare the shop drawings required for manufacturing and installation. Your consent documentation remains focused on design intent, while our shop drawings provide the information needed for fabrication and construction.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <h3>What cladding systems can be used with SuperPanel?</h3>
+            <span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span>
+          </button>
+          <div class="faq-body">
+            <p>SuperPanel is compatible with both absorbent and non-absorbent cladding systems installed over a minimum 18mm drained cavity in accordance with E2/AS1.</p>
+            <p>This includes most commonly specified claddings — brick veneer, timber weatherboards, plaster systems, and metal cladding. The selected cladding system must have an appropriate BRANZ appraisal and be installed with the specified underlay and flashing requirements.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <h3>How are windows detailed with SuperPanel?</h3>
+            <span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span>
+          </button>
+          <div class="faq-body">
+            <p>Windows are fixed in accordance with the joinery manufacturer's requirements, with our sill, head, and jamb details providing the SIP-specific interface.</p>
+            <p>As with any highly insulated building envelope, glazing ratios and window performance should be considered carefully during design to minimise condensation risk and avoid unnecessary thermal bridging.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <h3>Can SuperPanel be used in high wind zones?</h3>
+            <span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span>
+          </button>
+          <div class="faq-body">
+            <p>Yes. Our standard system has been engineered to accommodate projects within the "Very High" ultimate limit state wind classification under NZS 3604:2011, covering AS/NZS 1170.2 wind zones NZ1–NZ4.</p>
+            <p>Projects outside these parameters can typically be addressed through project-specific engineering.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <h3>How are plumbing and electrical services handled?</h3>
+            <span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span>
+          </button>
+          <div class="faq-body">
+            <p><strong>Electrical services:</strong> Standard panels incorporate pre-formed 38mm service chases during manufacture, including two horizontal runs and one full-height vertical chase within a typical 1200mm-wide panel. We recommend involving the electrical contractor during the shop drawing phase to coordinate service locations.</p>
+            <p><strong>Plumbing services:</strong> Plumbing is generally accommodated within a dedicated internal services cavity created by battens fixed to the panel face. Direct perpendicular penetrations through panels are acceptable; however, plumbing should not run horizontally or vertically within the panel core.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <h3>Can panels exceed the standard span tables?</h3>
+            <span class="faq-icon"><svg viewBox="0 0 12 12"><line x1="6" y1="2" x2="6" y2="10"/><line x1="2" y1="6" x2="10" y2="6"/></svg></span>
+          </button>
+          <div class="faq-body">
+            <p>Often, yes. The published span tables reflect our standard pre-engineered offering rather than the absolute capability of the system.</p>
+            <p>Projects involving increased loads, larger spans, unusual geometries, or demanding environmental conditions can frequently be achieved through Specific Engineering Design. If you're considering something outside the published guidance, we'd encourage an early conversation.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ CTA ══════════ -->
+  <section class="section-cta">
+    <div class="container">
+      <p class="eyebrow">Ready to specify SuperPanel?</p>
+      <h2>Let's talk about your project.</h2>
+      <p>The earlier SIP construction is considered within the design process, the more opportunity there is to optimise structure, thermal performance, and buildability.</p>
+      <div class="cta-contact-row">
+        <div class="cta-contact-item">
+          <span>📞</span>
+          <a href="tel:0210555646">021 055 5646</a>
+        </div>
+        <div class="cta-contact-sep"></div>
+        <div class="cta-contact-item">
+          <span>✉</span>
+          <a href="mailto:office@supersub.co.nz">office@supersub.co.nz</a>
+        </div>
+        <div class="cta-contact-sep"></div>
+        <div class="cta-contact-item">
+          <a href="#package" class="btn btn-primary" style="font-size:14px; padding: 11px 22px;">Get the Technical Package</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="footer">
+    <div class="footer-grid">
+
+      <!-- Brand -->
+      <div>
+        <div class="footer-brand-logo">
+          <svg class="footer-brand-mark" viewBox="0 0 30 30" fill="none">
+            <rect width="30" height="30" rx="6" fill="#276ce9"/>
+            <path d="M7 11h16M7 15h16M7 19h11" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="footer-brand-name">SUPER<span>SUB</span></span>
+        </div>
+        <p class="footer-tagline">Supersub delivers system-led modular homes and building solutions designed for speed, efficiency, and long-term performance.</p>
+        <p class="footer-trust">Always check the LBP Register to ensure your building practitioner is Licensed.</p>
+        <p class="footer-trust">Supersub have a team of 3 Registered Architects.</p>
+        <div class="footer-socials">
+          <!-- Facebook -->
+          <a href="#" class="footer-social-icon">
+            <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <!-- Instagram -->
+          <a href="#" class="footer-social-icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="var(--color-navy)"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="var(--color-navy)" stroke-width="2" stroke-linecap="round"/></svg>
+          </a>
+          <!-- LinkedIn -->
+          <a href="#" class="footer-social-icon">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="https://supersub.co.nz">Home</a></li>
+          <li><a href="https://supersub.co.nz/about-us">About Us</a></li>
+          <li><a href="#">Blogs</a></li>
+          <li><a href="#" class="active-page">Technical Centre</a></li>
+          <li><a href="https://supersub.co.nz/contact-us">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Solutions -->
+      <div class="footer-col">
+        <h4>Solutions</h4>
+        <ul>
+          <li><a href="#">Modular Homes</a></li>
+          <li><a href="#">SIPS House Kitsets</a></li>
+          <li><a href="https://supersub.co.nz/snaplock-wall">SnapLock Wall</a></li>
+          <li><a href="#">Portable Bathrooms</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <div class="footer-contact-row">
+          <span class="icon">📞</span>
+          <p><a href="tel:0800782631">0800 782 631</a></p>
+        </div>
+        <div class="footer-contact-row">
+          <span class="icon">✉</span>
+          <p><a href="mailto:office@supersub.co.nz">office@supersub.co.nz</a></p>
+        </div>
+        <div class="footer-contact-row">
+          <span class="icon">📍</span>
+          <p>2 Matos Segedin Drive, Leamington, Cambridge</p>
+        </div>
+        <a href="#" class="footer-network-btn">Join Supersub Network →</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>© Supersub Limited 2025 | All Rights Reserved</p>
+      <div class="footer-bottom-links">
+        <a href="#">Terms & Conditions of Sale</a>
+        <a href="#">Resources</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════ JS ══════════ -->
+  <script>
+    function toggleNav() {
+      const drawer = document.getElementById('navDrawer');
+      drawer.classList.toggle('open');
+    }
+
+    function toggleFaq(trigger) {
+      const item = trigger.closest('.faq-item');
+      const body = item.querySelector('.faq-body');
+      const isOpen = item.classList.contains('open');
+
+      // Close all open items
+      document.querySelectorAll('.faq-item.open').forEach(el => {
+        el.classList.remove('open');
+        el.querySelector('.faq-body').classList.remove('open');
+      });
+
+      // Open clicked if it was closed
+      if (!isOpen) {
+        item.classList.add('open');
+        body.classList.add('open');
+      }
+    }
+
+    function submitForm() {
+      const fname   = document.getElementById('fname').value.trim();
+      const femail  = document.getElementById('femail').value.trim();
+      const fpractice = document.getElementById('fpractice').value.trim();
+
+      if (!fname || !femail) {
+        alert('Please fill in your name and email address.');
+        return;
+      }
+
+      // Hide form, show success
+      document.getElementById('packageForm').style.display = 'none';
+      document.getElementById('formSuccess').classList.add('show');
+    }
+
+    // Smooth anchor for # links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
