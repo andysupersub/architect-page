@@ -1061,6 +1061,178 @@
     @media (max-width: 440px) {
       .details-grid { grid-template-columns: 1fr; }
     }
+
+    /* ══════════════════════════════════════
+       SOFTWARE DOWNLOAD LOGOS SECTION
+    ══════════════════════════════════════ */
+    .section-software-dl {
+      padding: 72px var(--px);
+      background: var(--color-white);
+    }
+    .software-dl-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .software-dl-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .software-dl-header h2 {
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+      color: var(--color-navy);
+      margin-bottom: 12px;
+    }
+    .software-dl-header p {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(1,22,72,0.6);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .software-dl-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .software-dl-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+      padding: 32px 24px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      text-align: center;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+    }
+    .software-dl-card:hover {
+      box-shadow: 0 8px 32px rgba(1,22,72,0.10);
+      transform: translateY(-3px);
+      border-color: rgba(39,108,233,0.2);
+    }
+
+    /* Logo area */
+    .software-dl-logo {
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .software-dl-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    /* Fallback SVG logo box */
+    .software-dl-logo-box {
+      width: 72px;
+      height: 72px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #fff;
+      flex-direction: column;
+      gap: 2px;
+      line-height: 1.2;
+    }
+
+    .software-dl-name {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      color: var(--color-navy);
+      margin-bottom: 4px;
+    }
+    .software-dl-ext {
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(1,22,72,0.45);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .software-dl-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(1,22,72,0.55);
+      line-height: 1.55;
+      margin-bottom: 24px;
+      flex: 1;
+    }
+
+    .software-dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      background: var(--color-mist);
+      border: 1px solid var(--color-border);
+      color: var(--color-navy);
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      text-decoration: none;
+      width: 100%;
+      justify-content: center;
+    }
+    .software-dl-btn:hover {
+      background: var(--color-blue);
+      border-color: var(--color-blue);
+      color: var(--color-white);
+    }
+    .software-dl-btn svg {
+      width: 13px; height: 13px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    /* "Coming soon" state */
+    .software-dl-btn.coming-soon {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Note line under grid */
+    .software-dl-note {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(1,22,72,0.45);
+      line-height: 1.6;
+    }
+    .software-dl-note a {
+      color: var(--color-blue);
+      font-weight: 500;
+    }
+    .software-dl-note a:hover { opacity: 0.75; }
+
+    @media (max-width: 900px) {
+      .software-dl-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .software-dl-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -1164,6 +1336,112 @@
           <span class="format-tag"><span class="format-tag-icon">✉</span> Custom format on request</span>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ══════════ SOFTWARE DOWNLOAD LOGOS ══════════ -->
+  <section class="section-software-dl">
+    <div class="software-dl-inner">
+      <div class="software-dl-header">
+        <p class="eyebrow">Download by Format</p>
+        <h2>Works with your software.</h2>
+        <p>All 21 connection details are available in the format your team works with. Select your preferred software below to download the complete set.</p>
+      </div>
+
+      <div class="software-dl-grid">
+
+        <!-- PDF -->
+        <div class="software-dl-card">
+          <div class="software-dl-logo">
+            <div class="software-dl-logo-box" style="background: #E72528;">
+              <!-- Adobe PDF icon recreation -->
+              <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:72px;">
+                <rect width="72" height="72" rx="14" fill="#E72528"/>
+                <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" fill="white" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="18" letter-spacing="1">PDF</text>
+              </svg>
+            </div>
+          </div>
+          <div class="software-dl-name">PDF</div>
+          <div class="software-dl-ext">.pdf</div>
+          <div class="software-dl-desc">Universal format. View and print all 21 connection details in any PDF reader — no software required.</div>
+          <a href="#" class="software-dl-btn" id="btn-pdf" onclick="handleDownload(event,'PDF')">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download PDF
+          </a>
+        </div>
+
+        <!-- AutoCAD -->
+        <div class="software-dl-card">
+          <div class="software-dl-logo">
+            <div class="software-dl-logo-box" style="background: #E51837;">
+              <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:72px;">
+                <rect width="72" height="72" rx="14" fill="#E51837"/>
+                <!-- AutoCAD-style A mark -->
+                <polygon points="36,16 50,54 42,54 36,36 30,54 22,54" fill="white" opacity="0.95"/>
+                <rect x="27" y="44" width="18" height="4" fill="#E51837"/>
+                <text x="50%" y="78%" dominant-baseline="middle" text-anchor="middle" fill="white" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="9" letter-spacing="0.5">AutoCAD</text>
+              </svg>
+            </div>
+          </div>
+          <div class="software-dl-name">AutoCAD</div>
+          <div class="software-dl-ext">.dwg</div>
+          <div class="software-dl-desc">Industry-standard DWG files. Open directly in AutoCAD or any DWG-compatible drafting software.</div>
+          <a href="#" class="software-dl-btn" id="btn-dwg" onclick="handleDownload(event,'DWG')">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download DWG
+          </a>
+        </div>
+
+        <!-- Revit -->
+        <div class="software-dl-card">
+          <div class="software-dl-logo">
+            <div class="software-dl-logo-box" style="background: #1B6DC3;">
+              <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:72px;">
+                <rect width="72" height="72" rx="14" fill="#1B6DC3"/>
+                <!-- Revit-style R mark -->
+                <path d="M22 18h16c5 0 9 3 9 8s-4 8-9 8h-8l10 16H30L20 50h2V18z" fill="none"/>
+                <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" fill="white" font-family="Inter,Arial,sans-serif" font-weight="800" font-size="32" letter-spacing="-1">R</text>
+                <text x="50%" y="80%" dominant-baseline="middle" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-family="Inter,Arial,sans-serif" font-weight="600" font-size="9" letter-spacing="0.5">Revit</text>
+              </svg>
+            </div>
+          </div>
+          <div class="software-dl-name">Revit</div>
+          <div class="software-dl-ext">.rvt</div>
+          <div class="software-dl-desc">Native Revit families and details. Drag-and-drop directly into your BIM model — ready for documentation.</div>
+          <a href="#" class="software-dl-btn" id="btn-rvt" onclick="handleDownload(event,'RVT')">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download RVT
+          </a>
+        </div>
+
+        <!-- ArchiCAD -->
+        <div class="software-dl-card">
+          <div class="software-dl-logo">
+            <div class="software-dl-logo-box" style="background: #006B6B;">
+              <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:72px;">
+                <rect width="72" height="72" rx="14" fill="#006B6B"/>
+                <!-- ArchiCAD-style compass/A mark -->
+                <circle cx="36" cy="33" r="14" stroke="white" stroke-width="3" fill="none" opacity="0.9"/>
+                <line x1="36" y1="19" x2="36" y2="33" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                <line x1="36" y1="33" x2="44" y2="44" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+                <text x="50%" y="82%" dominant-baseline="middle" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Inter,Arial,sans-serif" font-weight="600" font-size="8.5" letter-spacing="0.3">ArchiCAD</text>
+              </svg>
+            </div>
+          </div>
+          <div class="software-dl-name">ArchiCAD</div>
+          <div class="software-dl-ext">.pla</div>
+          <div class="software-dl-desc">ArchiCAD-native format. Import directly into your project as library parts and construction details.</div>
+          <a href="#" class="software-dl-btn" id="btn-pla" onclick="handleDownload(event,'PLA')">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download PLA
+          </a>
+        </div>
+
+      </div>
+
+      <p class="software-dl-note">
+        Files will be available once provided by Supersub. Need a specific format not listed? <a href="mailto:office@supersub.co.nz">Get in touch</a> and we'll sort it out.
+      </p>
     </div>
   </section>
 
@@ -1657,6 +1935,62 @@
 
   <!-- ══════════ JS ══════════ -->
   <script>
+    // ── Download URL config — swap these when Reg sends the files ──
+    const DOWNLOAD_URLS = {
+      PDF: '',   // e.g. 'https://drive.google.com/uc?export=download&id=XXXXX'
+      DWG: '',
+      RVT: '',
+      PLA: '',
+    };
+
+    function handleDownload(e, format) {
+      e.preventDefault();
+      const url = DOWNLOAD_URLS[format];
+      if (url) {
+        window.open(url, '_blank');
+      } else {
+        // File not yet available — show a toast
+        showToast('Files coming soon — check back shortly or contact us at office@supersub.co.nz');
+      }
+    }
+
+    function showToast(msg) {
+      // Remove existing toast if any
+      const existing = document.getElementById('dl-toast');
+      if (existing) existing.remove();
+
+      const toast = document.createElement('div');
+      toast.id = 'dl-toast';
+      toast.textContent = msg;
+      Object.assign(toast.style, {
+        position: 'fixed',
+        bottom: '28px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        background: '#011648',
+        color: '#fff',
+        padding: '14px 24px',
+        borderRadius: '10px',
+        fontSize: '14px',
+        fontWeight: '400',
+        fontFamily: 'Inter, sans-serif',
+        letterSpacing: '-0.01em',
+        lineHeight: '1.5',
+        boxShadow: '0 8px 32px rgba(1,22,72,0.25)',
+        zIndex: '9999',
+        maxWidth: '90vw',
+        textAlign: 'center',
+        opacity: '0',
+        transition: 'opacity 0.2s ease',
+      });
+      document.body.appendChild(toast);
+      requestAnimationFrame(() => toast.style.opacity = '1');
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
     function toggleNav() {
       const drawer = document.getElementById('navDrawer');
       drawer.classList.toggle('open');
